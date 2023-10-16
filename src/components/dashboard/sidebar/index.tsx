@@ -40,7 +40,7 @@ const LinkItems: LinkItem[] = [
 
 const Sidebar = () => {
   return (
-    <nav className="md:flex md:flex-col sidebar-height top-16 fixed left-0 z-50 justify-between hidden w-1/6 p-4 overflow-hidden border-2 border-red-600">
+    <nav className="md:flex md:flex-col sidebar-height top-16 fixed left-0 z-50 justify-between hidden w-[15rem] bg-[#ebebeb] p-2 overflow-hidden border border-red-500">
       <div className="">
         <ul>
           {LinkItems.map(({ id, Icon, linkName, reference }) => {
@@ -61,14 +61,6 @@ const Sidebar = () => {
             );
           })}
         </ul>
-      </div>
-      <div className="">
-        {/* {[, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
-          (v, i) => {
-            return <div key={i}>Setting</div>;
-          }
-        )} */}
-        <button>Settings</button>
       </div>
     </nav>
   );

@@ -16,7 +16,7 @@ const Header = () => {
             </span>
           </button>
         </div>
-        <div className="-red-500 flex items-center justify-center p-2">
+        <div className="flex items-center justify-center p-2">
           <Search />
         </div>
         <div className="right-content flex items-center justify-end space-x-3">
