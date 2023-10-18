@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       backgroundColor: {
         header: "#1A1A1A",
+        modal: "rgba(0, 0, 0, 0.8)",
       },
       height: {
         header: "4rem",

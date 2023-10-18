@@ -1,33 +1,51 @@
+"use client";
+import { Dialog } from "@headlessui/react";
+import { useState } from "react";
+
 export default function Home() {
+  let [isOpen, setIsOpen] = useState(false);
+
   return (
     <>
-      <div className="flex h-screen">
-        <aside className="fixed left-0 top-0 h-full bg-gray-700 text-white p-4">
-          {/* Sidebar content goes here */}
-          <h1>sidebar</h1>
-        </aside>
-        <div className="flex flex-col flex-1 overflow-hidden">
-          <header className="fixed top-0 w-full bg-gray-800 text-white p-4">
-            {/* Header content goes here */}
-            <h1>header</h1>
-          </header>
-          <div className="flex">
-            <main className="flex-1 overflow-y-auto p-4">
-              {/* Main content goes here */}
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17].map(
-                (i) => {
-                  return (
-                    <div key={i} className="w-full bg-red-500">
-                      <h1>Hello</h1>
-                      <h2>items</h2>
-                    </div>
-                  );
-                }
-              )}
-            </main>
-          </div>
-        </div>
+      <div className="min-h-[1000px] border-2  bg-none border-red-500">
+        <h1>hello world</h1>
       </div>
+      {/* <div className="relative bg-emerald-300 z-[1]">
+        <button className="bg-slate-400" onClick={() => setIsOpen(true)}>
+          Open Model
+        </button>
+        {isOpen ? (
+          <>
+            <div className="fixed inset-0 bg-black/30 z-[1000]" />
+            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-green-300 p-4 z-[1000]">
+              <button onClick={() => setIsOpen(false)}>close modal</button>
+              <p>Fancy Modal</p>
+            </div>
+          </>
+        ) : null}
+      </div>
+      <div className="relative z-[2] bg-red-300 p-2">Other content</div> */}
+      {/* <button onClick={() => setIsOpen(true)}>open modal</button>
+      <Dialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="border border-red-400 p-8"
+      >
+        <Dialog.Panel as="div" className="border border-green-400">
+          <Dialog.Title>Deactivate account</Dialog.Title>
+          <Dialog.Description>
+            This will permanently deactivate your account
+          </Dialog.Description>
+
+          <p>
+            Are you sure you want to deactivate your account? All of your data
+            will be permanently removed. This action cannot be undone.
+          </p>
+
+          <button onClick={() => setIsOpen(false)}>Deactivate</button>
+          <button onClick={() => setIsOpen(false)}>Cancel</button>
+        </Dialog.Panel>
+      </Dialog> */}
     </>
   );
 }

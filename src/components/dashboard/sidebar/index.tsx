@@ -40,7 +40,7 @@ const LinkItems: LinkItem[] = [
 
 const Sidebar = () => {
   return (
-    <nav className="md:flex md:flex-col sidebar-height top-16 fixed left-0 z-50 justify-between hidden w-[15rem] bg-[#ebebeb] p-2 overflow-hidden border border-red-500">
+    <nav className="md:flex md:flex-col sidebar-height top-16 fixed left-0 z-50 justify-between hidden w-[15rem] bg-[#ebebeb] p-2 overflow-hidden">
       <div className="">
         <ul>
           {LinkItems.map(({ id, Icon, linkName, reference }) => {

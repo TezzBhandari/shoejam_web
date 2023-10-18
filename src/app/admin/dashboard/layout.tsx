@@ -10,9 +10,7 @@ export default function DashboardLayout({
     <>
       <Header />
       <Sidebar />
-      <main className="mt-16 md:ml-[15rem] border border-green-500">
-        {children}
-      </main>
+      <main className="mt-16 md:ml-[15rem] max-w-full">{children}</main>
     </>
   );
 }
