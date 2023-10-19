@@ -1,18 +1,24 @@
 "use client";
 
-import React, { FormEvent, Fragment } from "react";
+import React, { FormEvent, Fragment, useState } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import useCategoryModalStore from "@/store/categoryModalStore";
 
 const CreateCategoryModal = () => {
-  const state = useCategoryModalStore();
+  const { isOpen, closeModal, categoryInput, handleCategoryInput } =
+    useCategoryModalStore();
+
+  const handleCategorySubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <>
       {/*  dialog components */}
 
-      <Transition show={state.isOpen} as={Fragment}>
+      <Transition show={isOpen} as={Fragment}>
         <Dialog
-          onClose={state.closeModal}
+          onClose={closeModal}
           className="fixed inset-0 flex items-center z-[1000] justify-center overflow-y-auto"
         >
           <Transition.Child
@@ -39,14 +45,12 @@ const CreateCategoryModal = () => {
               <div className="p-2 text-lg font-bold tracking-normal">
                 <h2>Create Category</h2>
               </div>
-              <form
-                className="p-2 space-y-6"
-                onSubmit={(e: FormEvent<HTMLFormElement>) => {
-                  e.preventDefault();
-                }}
-              >
+              <form className="p-2 space-y-6" onSubmit={handleCategorySubmit}>
                 <div>
                   <input
+                    name="category_name"
+                    value={categoryInput.category_name}
+                    onChange={handleCategoryInput}
                     type="text"
                     placeholder="Category Name (e.g, Clothing, Electronics)"
                     className="focus:outline-none w-full px-3 py-1.5 border bg-transparent border-gray-300 rounded-lg shadow-sm focus:border-[#303030] focus:ring-1 focus:ring-[#303030] text-base placeholder:text-sm tracking-wider"
@@ -54,6 +58,9 @@ const CreateCategoryModal = () => {
                 </div>
                 <div>
                   <input
+                    name="category_slug"
+                    value={categoryInput.category_slug}
+                    onChange={handleCategoryInput}
                     type="text"
                     placeholder="Category Slug (Optional)"
                     className="focus:outline-none w-full bg-transparent placeholder-gray-400 px-2.5 py-1.5 border border-gray-300 rounded-lg shadow-sm focus:border-[#303030] focus:ring-1 focus:ring-[#303030] text-base placeholder:text-sm tracking-wider"
@@ -61,7 +68,7 @@ const CreateCategoryModal = () => {
                 </div>
                 <div className="flex justify-end space-x-4">
                   <button
-                    onClick={state.closeModal}
+                    onClick={closeModal}
                     className=" focus:outline-none focus:ring-1 focus:ring-black px-2.5 py-1 text-sm font-medium border border-gray-300 rounded-lg shadow-sm outline-none"
                   >
                     cancel
