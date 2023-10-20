@@ -3,10 +3,53 @@
 import React, { FormEvent, Fragment, useState } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import useCategoryModalStore from "@/store/categoryModalStore";
+import { useMutation } from "@tanstack/react-query";
+import axios, { AxiosResponse } from "axios";
 
 const CreateCategoryModal = () => {
-  const { isOpen, closeModal, categoryInput, handleCategoryInput } =
+  const { isOpen, closeModal, resetInput, categoryInput, handleCategoryInput } =
     useCategoryModalStore();
+
+  const {
+    mutate: submitCategory,
+    isPending,
+    isSuccess,
+    isError,
+    isIdle,
+  } = useMutation({
+    mutationFn: async ({
+      category_name,
+      category_slug,
+    }: {
+      category_name: string;
+      category_slug: string;
+    }) =>
+      await axios.post(
+        "http://localhost:3001/api/v1/admin/product-inventory/category",
+        {
+          category_name,
+          category_slug,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      ),
+    onSuccess: ({ data }) => {
+      console.log("success");
+      console.log(JSON.stringify(data));
+    },
+    onError: ({ message, name, cause, stack }) => {
+      console.log(message, name, stack);
+      console.log(JSON.stringify(cause));
+    },
+    onSettled: (data, error) => {
+      resetInput();
+      console.log("settled");
+      console.log(data, error);
+    },
+  });
 
   const handleCategorySubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,7 +117,13 @@ const CreateCategoryModal = () => {
                     cancel
                   </button>
                   <button
-                    onClick={() => {}}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      submitCategory({
+                        category_name: categoryInput.category_name,
+                        category_slug: categoryInput.category_slug,
+                      });
+                    }}
                     className=" px-2 py-1 bg-[#303030] text-white rounded-lg outline-none font-medium text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-black"
                   >
                     save

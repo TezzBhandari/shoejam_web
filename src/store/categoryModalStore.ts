@@ -13,6 +13,7 @@ export interface CategoryModalState {
 export interface CategoryModalAction {
   openModal: () => void;
   closeModal: () => void;
+  resetInput: () => void;
   handleCategoryInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -27,6 +28,15 @@ const useCategoryModalStore = create<
         category_slug: "",
       },
       openModal: () => set({ isOpen: true }),
+      resetInput: () =>
+        set((state) => ({
+          ...state,
+          categoryInput: {
+            ...state.categoryInput,
+            category_name: "",
+            category_slug: "",
+          },
+        })),
       closeModal: () =>
         set((state) => ({
           ...state,
