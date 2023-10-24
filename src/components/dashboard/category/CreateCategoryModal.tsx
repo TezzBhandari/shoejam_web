@@ -4,11 +4,37 @@ import React, { FormEvent, Fragment, useState } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import useCategoryModalStore from "@/store/categoryModalStore";
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
+import ErrorTemplate from "./ErrorTemplate";
+import { isAxiosError } from "axios";
+
+export interface Category {
+  id: string;
+  category_name: string;
+  category_slug: string;
+  parent_category: string | null;
+  updated_at: string;
+  created_at: string;
+}
+
+export interface CateogryMutationResponse {
+  status: string;
+  data: {
+    category: CateogryMutationResponse;
+  } | null;
+  errors: Array<{ message: string; property: string }> | null;
+}
 
 const CreateCategoryModal = () => {
-  const { isOpen, closeModal, resetInput, categoryInput, handleCategoryInput } =
-    useCategoryModalStore();
+  const {
+    isOpen,
+    closeModal,
+    resetInput,
+    setValidationError,
+    validationError,
+    categoryInput,
+    handleCategoryInput,
+  } = useCategoryModalStore();
 
   const {
     mutate: submitCategory,
@@ -24,7 +50,7 @@ const CreateCategoryModal = () => {
       category_name: string;
       category_slug: string;
     }) =>
-      await axios.post(
+      await axios.post<CateogryMutationResponse>(
         "http://localhost:3001/api/v1/admin/product-inventory/category",
         {
           category_name,
@@ -37,17 +63,38 @@ const CreateCategoryModal = () => {
         }
       ),
     onSuccess: ({ data }) => {
+      resetInput();
+      closeModal();
       console.log("success");
+      // toast logic here
       console.log(JSON.stringify(data));
     },
-    onError: ({ message, name, cause, stack }) => {
-      console.log(message, name, stack);
-      console.log(JSON.stringify(cause));
+    onError: (error) => {
+      console.log("error section");
+      if (
+        isAxiosError<CateogryMutationResponse, Record<string, unknown>>(error)
+      ) {
+        // console.log(error.response?.data.status === "error");
+
+        if (error.response?.status === 409) {
+          setValidationError({
+            category_name_error: "category name already exists",
+          });
+        }
+
+        if (error.response?.status === 400) {
+          setValidationError({
+            category_name_error: "category name is required",
+          });
+        }
+      } else {
+        console.log("something else occured");
+      }
+      // console.log(JSON.stringify(error))
     },
     onSettled: (data, error) => {
-      resetInput();
       console.log("settled");
-      console.log(data, error);
+      console.log(data, "error", error);
     },
   });
 
@@ -98,6 +145,9 @@ const CreateCategoryModal = () => {
                     placeholder="Category Name (e.g, Clothing, Electronics)"
                     className="focus:outline-none w-full px-3 py-1.5 border bg-transparent border-gray-300 rounded-lg shadow-sm focus:border-[#303030] focus:ring-1 focus:ring-[#303030] text-base placeholder:text-sm tracking-wider"
                   />
+                  <ErrorTemplate
+                    errorMessage={validationError.category_name_error}
+                  />
                 </div>
                 <div>
                   <input
@@ -112,21 +162,31 @@ const CreateCategoryModal = () => {
                 <div className="flex justify-end space-x-4">
                   <button
                     onClick={closeModal}
-                    className=" focus:outline-none focus:ring-1 focus:ring-black px-2.5 py-1 text-sm font-medium border border-gray-300 rounded-lg shadow-sm outline-none"
+                    className={`${
+                      isPending ? "cursor-not-allowed" : ""
+                    } focus:outline-none focus:ring-1 focus:ring-black px-2.5 py-1 text-sm font-medium border border-gray-300 rounded-lg shadow-sm outline-none`}
+                    disabled={isPending ? true : false}
                   >
                     cancel
                   </button>
                   <button
                     onClick={(e) => {
                       e.preventDefault();
-                      submitCategory({
-                        category_name: categoryInput.category_name,
-                        category_slug: categoryInput.category_slug,
-                      });
+                      // handle empty input before submitting
+                      if (!categoryInput.category_name) {
+                        setValidationError({
+                          category_name_error: "category name is required",
+                        });
+                      } else {
+                        submitCategory({
+                          category_name: categoryInput.category_name,
+                          category_slug: categoryInput.category_slug,
+                        });
+                      }
                     }}
                     className=" px-2 py-1 bg-[#303030] text-white rounded-lg outline-none font-medium text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-black"
                   >
-                    save
+                    {isPending ? "submitting..." : "save"}
                   </button>
                 </div>
               </form>
