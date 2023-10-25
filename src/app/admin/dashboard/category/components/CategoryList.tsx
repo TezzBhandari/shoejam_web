@@ -27,7 +27,6 @@ const getCategories = async () => {
 const CategoryList = async () => {
   const { status, data, errors } = await getCategories();
 
-  //   console.log("categories: \n", data?.data);
   const categories = data.categories;
 
   return (

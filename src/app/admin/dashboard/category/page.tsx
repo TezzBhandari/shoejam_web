@@ -1,6 +1,6 @@
 import AddProductButton from "@/components/dashboard/category/AddProductButton";
-import CategoryList from "@/components/dashboard/category/CategoryList";
 import CreateCategoryModal from "@/components/dashboard/category/CreateCategoryModal";
+import CategoryList from "./components/CategoryList";
 
 const Category = () => {
   return (
