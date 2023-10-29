@@ -1,4 +1,5 @@
 import axios from "axios";
+import CategoryTable from "./CategoryTable";
 
 export interface Category {
   id: string;
@@ -27,19 +28,14 @@ const getCategories = async () => {
 const CategoryList = async () => {
   const { status, data, errors } = await getCategories();
 
-  const categories = data.categories;
+  let tableData: Array<Category> = [];
+  if (data.categories !== null) {
+    tableData = data.categories;
+  }
 
   return (
-    <div className="wrapper">
-      <ul>
-        {categories !== null ? (
-          categories.map((category) => {
-            return <li key={category.id}>{category.category_name}</li>;
-          })
-        ) : (
-          <li>category not available</li>
-        )}
-      </ul>
+    <div className="wrapper p-2">
+      <CategoryTable tableData={tableData} />
     </div>
   );
 };
