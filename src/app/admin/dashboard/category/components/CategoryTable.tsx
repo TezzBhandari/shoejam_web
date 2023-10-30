@@ -6,13 +6,14 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   useReactTable,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 import { type Category } from "./CategoryList";
-import { BiSearch } from "react-icons/bi";
-import { Ephesis } from "next/font/google";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 
 const columnHelper = createColumnHelper<Category>();
 
+// COULUMN DEFINITION FOR THE TABLE
 const columns = [
   columnHelper.accessor("id", {
     header: () => "id",
@@ -69,6 +70,7 @@ const CategoryTable = ({ tableData }: { tableData: Array<Category> }) => {
     data: memoData,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     state: {
       globalFilter: filter,
     },
@@ -130,6 +132,35 @@ const CategoryTable = ({ tableData }: { tableData: Array<Category> }) => {
           ))}
         </tbody>
       </table>
+
+      {/* PAGINATION */}
+      {table.getCanNextPage() === true &&
+      table.getCanPreviousPage() === true ? (
+        <div className="pagination rounded-b-2xl flex items-center justify-center p-2 text-blue-700">
+          <button
+            disabled={!table.getCanPreviousPage()}
+            onClick={() => table.previousPage()}
+            className={
+              table.getCanPreviousPage() === true
+                ? `px-1.5 py-1 bg-[#ebebeb] rounded-l-xl`
+                : `px-1.5 py-1 bg-[#f1f1f1] rounded-l-xl cursor-not-allowed`
+            }
+          >
+            <GrFormPrevious className="w-5 h-5" />
+          </button>
+          <button
+            disabled={!table.getCanNextPage()}
+            onClick={() => table.nextPage()}
+            className={
+              table.getCanNextPage() === true
+                ? `px-1.5 py-1 bg-[#ebebeb] rounded-r-xl hover:bg-[#e3e3e3]`
+                : `px-1.5 py-1 bg-[#f1f1f1] rounded-r-xl cursor-not-allowed hover:bg-[#e3e3e3]`
+            }
+          >
+            <GrFormNext className="w-5 h-5" />
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };
