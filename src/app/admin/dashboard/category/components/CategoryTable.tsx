@@ -1,5 +1,6 @@
 "use client";
 import React, { useMemo, useState } from "react";
+import { MdDelete, MdModeEditOutline } from "react-icons/md";
 import {
   createColumnHelper,
   flexRender,
@@ -7,62 +8,117 @@ import {
   getFilteredRowModel,
   useReactTable,
   getPaginationRowModel,
+  ColumnDef,
 } from "@tanstack/react-table";
 import { type Category } from "./CategoryList";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import CategoryCheckBox from "./CategoryCheckBox";
 
 const columnHelper = createColumnHelper<Category>();
 
-// COULUMN DEFINITION FOR THE TABLE
-const columns = [
-  columnHelper.accessor("id", {
-    header: () => "id",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("category_name", {
-    header: () => "category name",
-    cell: (info) => info.getValue(),
-  }),
-  // columnHelper.accessor("category_slug", {
-  //   header: () => "category slug",
-  //   cell: (info) => info.getValue(),
-  // }),
-
-  columnHelper.accessor("category_path", {
-    header: () => "category path",
-    cell: (info) => info.getValue(),
-  }),
-  // columnHelper.accessor("category_level", {
-  //   header: () => "category level",
-  //   cell: (info) => info.getValue(),
-  // }),
-  // columnHelper.accessor("parent_category_id", {
-  //   header: () => "parent category id",
-  //   cell: (info) => info.getValue(),
-  // }),
-  columnHelper.accessor("parent_category_name", {
-    header: () => "parent category name",
-    cell: (info) =>
-      info.getValue() !== null ? (
-        info.getValue()
-      ) : (
-        <span className="bg-gray-400 text-center rounded-xl px-1.5 py-1 shadow-sm text-xs font-light capitalize">
-          no parent
-        </span>
-      ),
-  }),
-];
-
 const CategoryTable = ({ tableData }: { tableData: Array<Category> }) => {
+  //handle edit
+  const handleEdit = (row: Category) => {
+    console.log(row);
+  };
+
   // table data
   const [data, setData] = useState<Array<Category>>(tableData);
 
   // state for filtering table data
   const [filter, setFilter] = useState("");
 
+  const [selectedRow, setSelectedRow] = useState({});
+
   //memoizing table data and column
   const memoData = useMemo(() => data, []);
-  const memoColumn = useMemo(() => columns, []);
+  const memoColumn = useMemo(
+    // COULUMN DEFINITION FOR THE TABLE
+    () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <CategoryCheckBox
+            {...{
+              checked: table.getIsAllRowsSelected(),
+              indeterminate: table.getIsSomeRowsSelected(),
+              onChange: table.getToggleAllRowsSelectedHandler(),
+            }}
+          />
+        ),
+        cell: ({ row }) => (
+          <div>
+            <CategoryCheckBox
+              {...{
+                checked: row.getIsSelected(),
+                disabled: !row.getCanSelect(),
+                indeterminate: row.getIsSomeSelected(),
+                onChange: row.getToggleSelectedHandler(),
+              }}
+            />
+          </div>
+        ),
+      },
+      columnHelper.accessor("id", {
+        header: () => "id",
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor("category_name", {
+        header: () => "category name",
+        cell: (info) => info.getValue(),
+      }),
+      // columnHelper.accessor("category_slug", {
+      //   header: () => "category slug",
+      //   cell: (info) => info.getValue(),
+      // }),
+
+      columnHelper.accessor("category_path", {
+        header: () => "category path",
+        cell: (info) => info.getValue(),
+      }),
+      // columnHelper.accessor("category_level", {
+      //   header: () => "category level",
+      //   cell: (info) => info.getValue(),
+      // }),
+      // columnHelper.accessor("parent_category_id", {
+      //   header: () => "parent category id",
+      //   cell: (info) => info.getValue(),
+      // }),
+      columnHelper.accessor("parent_category_name", {
+        header: () => "parent category name",
+        cell: (info) =>
+          info.getValue() !== null ? (
+            info.getValue()
+          ) : (
+            <span className="bg-gray-400 text-center rounded-xl px-1.5 py-1 shadow-sm text-xs font-light capitalize">
+              no parent
+            </span>
+          ),
+      }),
+      {
+        id: "actions",
+        header: "Actions",
+        cell: (info) => (
+          <div className="flex items-center space-x-1">
+            <span
+              onClick={() => {
+                // console.log(info.table.getCoreRowModel().flatRows[3].original);
+                handleEdit(info.row.original);
+              }}
+              className="cursor-pointer p-1 hover:bg-gray-300 rounded-md text-gray-600"
+            >
+              <MdModeEditOutline className="w-5 h-5" />
+            </span>
+            <span className="cursor-pointer p-1 hover:bg-gray-300 rounded-md text-gray-600">
+              <MdDelete className="w-5 h-5" />
+            </span>
+          </div>
+        ),
+      },
+    ],
+    // useMemo Dependency array
+    []
+  );
 
   // instantiating react table
   const table = useReactTable({
@@ -73,12 +129,19 @@ const CategoryTable = ({ tableData }: { tableData: Array<Category> }) => {
     getPaginationRowModel: getPaginationRowModel(),
     state: {
       globalFilter: filter,
+      rowSelection: selectedRow,
     },
+    onRowSelectionChange: setSelectedRow,
+    enableRowSelection: false,
+
     onGlobalFilterChange: setFilter,
   });
 
+  // debug select
+  // console.log(table.getSelectedRowModel().flatRows[0]?.original);
+
   return (
-    <div className="bg-[#ffffff] shadow-lg rounded-2xl border border-gray-300">
+    <div className="w-table-wrapper  mx-auto border border-gray-300 bg-[#ffffff] shadow-lg rounded-2xl">
       <div className=" p-1">
         <form
           onSubmit={(e) => e.preventDefault()}
@@ -96,7 +159,10 @@ const CategoryTable = ({ tableData }: { tableData: Array<Category> }) => {
           />
         </form>
       </div>
-      <table className=" border-spacing-[2px] min-w-full w-full">
+      {/* Table */}
+
+      <table className="border-spacing-[2px] min-w-full rounded-2xl">
+        {/* className=" border-spacing-[2px] min-w-full w-full" */}
         <thead className="bg-[#EBEBEB] text-[#616161]">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -104,7 +170,7 @@ const CategoryTable = ({ tableData }: { tableData: Array<Category> }) => {
                 <th
                   key={header.id}
                   colSpan={header.colSpan}
-                  className=" border-b border-gray-300 px-3 py-1.5 font-medium text-sm capitalize w-[100px] text-left overflow-auto"
+                  className=" border-b border-gray-300 px-3 py-1.5 font-medium text-sm capitalize text-left overflow-auto"
                 >
                   {header.isPlaceholder
                     ? null
@@ -119,12 +185,12 @@ const CategoryTable = ({ tableData }: { tableData: Array<Category> }) => {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+            <tr
+              key={row.id}
+              className="border-b border-gray-300 last:border-b-0"
+            >
               {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  className="px-3 py-2 border-b text-sm w-[100px] border-gray-300"
-                >
+                <td key={cell.id} className="px-3 py-2 text-sm">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
