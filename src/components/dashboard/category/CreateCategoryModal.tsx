@@ -20,7 +20,7 @@ export interface Category {
 export interface CateogryMutationResponse {
   status: string;
   data: {
-    category: CateogryMutationResponse;
+    category: Category;
   } | null;
   errors: Array<{ message: string; property: string }> | null;
 }
@@ -142,6 +142,7 @@ const CreateCategoryModal = () => {
                     value={categoryInput.category_name}
                     onChange={handleCategoryInput}
                     type="text"
+                    autoComplete="off"
                     placeholder="Category Name (e.g, Clothing, Electronics)"
                     className="focus:outline-none w-full px-3 py-1.5 border bg-transparent border-gray-300 rounded-lg shadow-sm focus:border-[#303030] focus:ring-1 focus:ring-[#303030] text-base placeholder:text-sm tracking-wider"
                   />
@@ -155,6 +156,7 @@ const CreateCategoryModal = () => {
                     value={categoryInput.category_slug}
                     onChange={handleCategoryInput}
                     type="text"
+                    autoComplete="off"
                     placeholder="Category Slug (Optional)"
                     className="focus:outline-none w-full bg-transparent placeholder-gray-400 px-2.5 py-1.5 border border-gray-300 rounded-lg shadow-sm focus:border-[#303030] focus:ring-1 focus:ring-[#303030] text-base placeholder:text-sm tracking-wider"
                   />

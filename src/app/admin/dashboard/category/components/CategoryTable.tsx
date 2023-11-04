@@ -1,6 +1,6 @@
 "use client";
 import React, { useMemo, useState } from "react";
-import { MdDelete, MdModeEditOutline } from "react-icons/md";
+import { MdDelete, MdModeEditOutline, MdAdd } from "react-icons/md";
 import {
   createColumnHelper,
   flexRender,
@@ -8,15 +8,19 @@ import {
   getFilteredRowModel,
   useReactTable,
   getPaginationRowModel,
-  ColumnDef,
 } from "@tanstack/react-table";
 import { type Category } from "./CategoryList";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import CategoryCheckBox from "./CategoryCheckBox";
+import useSubCategoryModalStore from "@/store/subCategoryModalStore";
+import useDeleteConfirmationModal from "@/store/DeleteConfirmationStore";
 
 const columnHelper = createColumnHelper<Category>();
 
 const CategoryTable = ({ tableData }: { tableData: Array<Category> }) => {
+  // this function is used to open subcategory modal form
+  const { openModal } = useSubCategoryModalStore();
+  const { onOpen: openDeleteCategoryModal } = useDeleteConfirmationModal();
   //handle edit
   const handleEdit = (row: Category) => {
     console.log(row);
@@ -102,14 +106,28 @@ const CategoryTable = ({ tableData }: { tableData: Array<Category> }) => {
           <div className="flex items-center space-x-1">
             <span
               onClick={() => {
+                openModal(info.row.original);
+              }}
+              className="cursor-pointer p-1 hover:bg-gray-300 rounded-md text-gray-600 "
+            >
+              <MdAdd className="w-5 h-5" />
+            </span>
+            {/* <span
+              onClick={() => {
                 // console.log(info.table.getCoreRowModel().flatRows[3].original);
                 handleEdit(info.row.original);
               }}
               className="cursor-pointer p-1 hover:bg-gray-300 rounded-md text-gray-600"
             >
               <MdModeEditOutline className="w-5 h-5" />
-            </span>
-            <span className="cursor-pointer p-1 hover:bg-gray-300 rounded-md text-gray-600">
+            </span> */}
+            <span
+              onClick={() => {
+                openDeleteCategoryModal({ category_id: info.row.original.id });
+                // handleDelete(info.row.original);
+              }}
+              className="cursor-pointer p-1 hover:bg-red-300 hover:text-red-400 rounded-md text-gray-600"
+            >
               <MdDelete className="w-5 h-5" />
             </span>
           </div>
@@ -200,7 +218,7 @@ const CategoryTable = ({ tableData }: { tableData: Array<Category> }) => {
       </table>
 
       {/* PAGINATION */}
-      {table.getCanNextPage() === true &&
+      {table.getCanNextPage() === true ||
       table.getCanPreviousPage() === true ? (
         <div className="pagination rounded-b-2xl flex items-center justify-center p-2 text-blue-700">
           <button

@@ -1,6 +1,8 @@
 import AddProductButton from "@/components/dashboard/category/AddProductButton";
 import CreateCategoryModal from "@/components/dashboard/category/CreateCategoryModal";
 import CategoryList from "./components/CategoryList";
+import CreateSubCategoryModal from "./components/CreateSubCategoryModal";
+import ConfirmationModal from "./components/ConfirmationModal";
 
 const Category = () => {
   return (
@@ -14,8 +16,12 @@ const Category = () => {
         </div>
         <CategoryList />
       </div>
-
+      {/* MODAL FORM FOR CREATING CATEGORY */}
       <CreateCategoryModal />
+      {/* MODAL FORM FOR CREATING SUB CATEGORY */}
+      <CreateSubCategoryModal />
+      {/* DELETE CONFIRMATION FOR CATEGORY  */}
+      <ConfirmationModal />
     </>
   );
 };
