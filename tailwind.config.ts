@@ -10,6 +10,10 @@ const config: Config = {
     extend: {
       backgroundColor: {
         header: "#1A1A1A",
+        modal: "rgba(0, 0, 0, 0.8)",
+      },
+      width: {
+        "table-wrapper": "min(1200px, 100% - 3rem)",
       },
       height: {
         header: "4rem",
