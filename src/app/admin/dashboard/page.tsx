@@ -1,8 +1,9 @@
-import Sidebar from "@/components/admin/dashboard/sidebar";
 const page = () => {
   return (
     <>
-      <Sidebar />
+      <div className="w-full sidebar-height bg-green-200">
+        <div className="w-48 h-48 bg-red-400 "></div>
+      </div>
     </>
   );
 };

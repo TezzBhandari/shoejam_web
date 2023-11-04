@@ -27,3 +27,7 @@ body {
     )
     rgb(var(--background-start-rgb)); */
 }
+
+.sidebar-height {
+  min-height: calc(100vh - 64px);
+}
