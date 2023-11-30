@@ -1,4 +1,4 @@
-import AddProductButton from "@/components/dashboard/category/AddProductButton";
+import AddProductButton from "@/components/dashboard/category/AddCategoryButton";
 import CreateCategoryModal from "@/components/dashboard/category/CreateCategoryModal";
 import CategoryList from "./components/CategoryList";
 import CreateSubCategoryModal from "./components/CreateSubCategoryModal";

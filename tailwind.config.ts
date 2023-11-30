@@ -8,6 +8,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        "upload-image":
+          "inset 0 -0.0625rem 0 #b5b5b5,inset -0.0625rem 0 0 #e3e3e3,inset 0.0625rem 0 0 #e3e3e3,inset 0 0.0625rem 0 #e3e3e3",
+      },
       backgroundColor: {
         header: "#1A1A1A",
         modal: "rgba(0, 0, 0, 0.8)",
