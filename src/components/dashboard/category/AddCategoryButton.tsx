@@ -2,7 +2,7 @@
 import useCategoryModalStore from "@/store/categoryModalStore";
 import React from "react";
 
-const AddProductButton = () => {
+const AddCategoryButton = () => {
   const openModal = useCategoryModalStore((state) => state.openModal);
 
   return (
@@ -17,4 +17,4 @@ const AddProductButton = () => {
   );
 };
 
-export default AddProductButton;
+export default AddCategoryButton;

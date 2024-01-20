@@ -28,7 +28,7 @@ const LinkItems: LinkItem[] = [
     id: 3,
     Icon: AiFillTag,
     linkName: "Product",
-    reference: "/admin/dashboard/product",
+    reference: "/admin/dashboard/products",
   },
   {
     id: 4,

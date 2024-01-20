@@ -22,55 +22,50 @@ export interface SubCategoryModalInput {
 
 const useSubCategoryModalStore = create<
   SubCategoryModalState & SubCategoryModalAction
->()(
-  devtools(
-    (set) => ({
-      parentCategory: null,
+>()((set) => ({
+  parentCategory: null,
 
+  subCategoryInput: {
+    sub_category_name: "",
+    sub_category_slug: "",
+  },
+
+  isOpen: false,
+
+  resetInput: () =>
+    set((state) => ({
+      ...state,
       subCategoryInput: {
+        ...state.subCategoryInput,
         sub_category_name: "",
         sub_category_slug: "",
       },
+    })),
 
+  closeModal: () => {
+    set((state) => ({
+      ...state,
       isOpen: false,
-
-      resetInput: () =>
-        set((state) => ({
-          ...state,
-          subCategoryInput: {
-            ...state.subCategoryInput,
-            sub_category_name: "",
-            sub_category_slug: "",
-          },
-        })),
-
-      closeModal: () => {
-        set((state) => ({
-          ...state,
-          isOpen: false,
-          subCategoryInput: {
-            ...state.subCategoryInput,
-            sub_category_name: "",
-            sub_category_slug: "",
-          },
-        }));
+      subCategoryInput: {
+        ...state.subCategoryInput,
+        sub_category_name: "",
+        sub_category_slug: "",
       },
+    }));
+  },
 
-      openModal: (parentCategory) =>
-        set((state) => ({ isOpen: true, parentCategory })),
+  openModal: (parentCategory) =>
+    set((state) => ({ isOpen: true, parentCategory })),
 
-      handleSubCategoryInput: (e: React.ChangeEvent<HTMLInputElement>) => {
-        set((state) => ({
-          ...state,
-          subCategoryInput: {
-            ...state.subCategoryInput,
-            [e.target.name]: e.target.value,
-          },
-        }));
+  handleSubCategoryInput: (e: React.ChangeEvent<HTMLInputElement>) => {
+    set((state) => ({
+      ...state,
+      subCategoryInput: {
+        ...state.subCategoryInput,
+        [e.target.name]: e.target.value,
       },
-    }),
-    { name: "subcategory-store" }
-  )
-);
+    }));
+  },
+}));
 
 export default useSubCategoryModalStore;
