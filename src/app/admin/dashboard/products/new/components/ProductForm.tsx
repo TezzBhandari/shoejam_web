@@ -11,6 +11,7 @@ const ProductForm = () => {
   const selectImageHandler = () => {
     console.log(imageInputRef.current?.click());
   };
+
   return (
     <form className="flex items-start justify-between">
       {/* PRODUCT NAME AND DESCRIPTION SECTION */}
@@ -101,12 +102,7 @@ const ProductForm = () => {
               </div>
             </div>
           </FormCardLayout>
-          <FormCardLayout>
-            <div>
-              <h2>Brand</h2>
-              <ListBox />
-            </div>
-          </FormCardLayout>
+
           {/* <FormCardLayout>
             <div>
               <h2>Variants</h2>
@@ -125,10 +121,20 @@ const ProductForm = () => {
       </div>
       {/* LEFT SIDE OF THE FORM  */}
       <div className="right pt-2 pr-2 w-[33%]">
-        <FormCardLayout>
-          <h3>Status</h3>
-          <FormInput />
-        </FormCardLayout>
+        <div className="flex flex-col gap-6">
+          <FormCardLayout>
+            <div className="flex flex-col gap-1 5">
+              <h3>Status</h3>
+              <FormInput />
+            </div>
+          </FormCardLayout>
+          <FormCardLayout>
+            <div className="flex flex-col gap-1.5">
+              <h2>Brand</h2>
+              <ListBox />
+            </div>
+          </FormCardLayout>
+        </div>
       </div>
     </form>
   );

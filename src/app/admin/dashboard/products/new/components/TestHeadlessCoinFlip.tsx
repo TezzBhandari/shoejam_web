@@ -3,7 +3,10 @@ import React, { ReactNode, useState } from "react";
 const random = () => Math.random();
 
 interface TestHeadlessCoinFlipProps {
-  children: ({rerun: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void, isHeads: boolean}) => ReactNode;
+  children: (childrenParams: {
+    rerun: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    isHeads: boolean;
+  }) => ReactNode;
 }
 
 const TestHeadlessCoinFlip: React.FC<TestHeadlessCoinFlipProps> = ({
@@ -11,10 +14,13 @@ const TestHeadlessCoinFlip: React.FC<TestHeadlessCoinFlipProps> = ({
 }) => {
   const [flipResult, setFlipResult] = useState<number>(random);
   const clickHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    setFlipResult(random)
-  }
-    return <>
-  <button onClick={e => {}}></button></>;
+    setFlipResult(random);
+  };
+
+  return children({
+    rerun: clickHandler,
+    isHeads: flipResult < 0.5,
+  });
 };
 
 export default TestHeadlessCoinFlip;

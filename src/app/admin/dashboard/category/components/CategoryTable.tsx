@@ -1,6 +1,6 @@
 "use client";
 import React, { useMemo, useState } from "react";
-import { MdDelete, MdModeEditOutline, MdAdd } from "react-icons/md";
+import { MdDelete, MdAdd } from "react-icons/md";
 import {
   createColumnHelper,
   flexRender,
@@ -9,6 +9,7 @@ import {
   useReactTable,
   getPaginationRowModel,
 } from "@tanstack/react-table";
+
 import { type Category } from "./CategoryList";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import CategoryCheckBox from "./CategoryCheckBox";
@@ -63,10 +64,12 @@ const CategoryTable = ({ tableData }: { tableData: Array<Category> }) => {
           </div>
         ),
       },
+
       columnHelper.accessor("id", {
         header: () => "id",
         cell: (info) => info.getValue(),
       }),
+
       columnHelper.accessor("category_name", {
         header: () => "category name",
         cell: (info) => info.getValue(),

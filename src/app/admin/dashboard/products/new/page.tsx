@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa6";
-import FormInput from "./components/FormInput";
 import ProductForm from "./components/ProductForm";
 const NewProduct = () => {
   return (
